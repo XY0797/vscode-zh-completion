@@ -32,7 +32,6 @@ VSCode Marketplace：[vscode-zh-completion](https://marketplace.visualstudio.com
 ### 普适
 
 适配不同类型的语言服务器（提供全部补全项的（如 Typescript） 和 部分补全项的（如 Python））
-（欢迎在代码仓库递交 issue（BUG））
 
 ## 效果图
 
@@ -46,8 +45,9 @@ VSCode Marketplace：[vscode-zh-completion](https://marketplace.visualstudio.com
 
 ## 感谢
 
-- 参考了 [中文代码快速补全](https://gitee.com/Program-in-Chinese/vscode_Chinese_Input_Assistant) 的实现
-- 参考了 [PYFL](https://www.npmjs.com/package/pyfl) 的拼音首字母字典的压缩算法
+- [中文代码快速补全](https://gitee.com/Program-in-Chinese/vscode_Chinese_Input_Assistant) 提供的参考实现
+- [PYFL](https://www.npmjs.com/package/pyfl) 提供的字典压缩算法
+- 大家使用过程中提出的宝贵意见（欢迎大家来代码仓库递交 issue 和 BUG）
 
 ## 协议
 
