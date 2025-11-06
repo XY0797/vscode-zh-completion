@@ -1,5 +1,6 @@
 import { uniqWith } from 'ramda';
 import * as vsc from './接口封装';
+import { 已配置语言列表, 通用语言配置 } from './语言';
 import { env } from './环境配置';
 
 /**
@@ -9,14 +10,35 @@ import { env } from './环境配置';
     - sortText: 此属性决定排序.
     - insertText: 实际插入的内容.
  */
+
+export function 专项补全器(context: vsc.ExtensionContext, 语言: string, 触发字符: string[]) {
+    context.subscriptions.push(
+        vsc.languages.registerCompletionItemProvider(
+            { language: 语言 },
+            { provideCompletionItems: 补全器实现, resolveCompletionItem: () => null },
+            ...触发字符
+        )
+    );
+}
+export function 通用补全器(context: vsc.ExtensionContext) {
+    context.subscriptions.push(
+        vsc.languages.registerCompletionItemProvider(
+            { language: '*' },
+            { provideCompletionItems: 通用补全器实现, resolveCompletionItem: () => null },
+            ...通用语言配置.触发字符
+        )
+    );
+}
 export async function 补全器实现(
     document: vsc.TextDocument, position: vsc.Position, token: vsc.CancellationToken, context: vsc.CompletionContext
 ) {
     const 输入值 = vsc.获得输入值();
+
+    if (env.获得系统补全中) { return []; }  // 避免无限循环（调用'获得系统补全'时会调用'提供补全'函数, 这会导致无限循环）
+
     vsc.log(`补全「${输入值}」${document.fileName}, ${document.languageId}, ${position.line}:${position.character}`);
 
     // 获得系统补全
-    if (env.获得系统补全中) { return []; }  // 避免无限循环（调用'获得系统补全'时会调用'提供补全'函数, 这会导致无限循环）
     env.获得系统补全中 = true;
     try {
         var 系统补全器 = await vsc.获得系统补全(document, position);
@@ -45,6 +67,15 @@ export async function 补全器实现(
     return new vsc.CompletionList(补全列表, true);
 }
 
+export async function 通用补全器实现(
+    document: vsc.TextDocument, position: vsc.Position, token: vsc.CancellationToken, context: vsc.CompletionContext
+) {
+    // 如果语言已配置，则不做处理（避免重复处理）
+    if (已配置语言列表.has(document.languageId)) {
+        return [];
+    }
+    return await 补全器实现(document, position, token, context);
+}
 
 /** 将字符串中的中文转换为拼音首字母：'中国 ❤ china' → 'zg ❤ china' */
 export function 转拼音首字母(text: string) {
@@ -59,6 +90,20 @@ export function 转拼音首字母(text: string) {
     }
     return result.join("");
 }
+
+
+
+// context.subscriptions.push(
+// 	vsc.languages.registerCompletionItemProvider(
+// 		[
+// 			{ scheme: 'file', language: '*' },
+// 			{ scheme: 'untitled', language: '*' },
+// 			{ scheme: 'file', language: '*', notebookType: '*' },
+// 			{ scheme: 'untitled', language: '*', notebookType: '*' },
+// 		],
+// 		{ provideCompletionItems: 补全器实现, resolveCompletionItem: () => null }
+// 	)
+// );
 
 
 // var 高权重列表: vsc.CompletionItem[] = [];  // 和输入值完全一样的、以输入值开头的
@@ -88,28 +133,3 @@ export function 转拼音首字母(text: string) {
 //     }
 // }
 // return new vsc.CompletionList(高权重列表.concat(低权重列表), true);
-
-
-
-// // 注册补全器(context, 'python', ['.', ' ']);	//「.」成员访问；「空格」特定上下文（如 import 后）的空格触发补全
-// // 注册补全器(context, 'html', ['<', '=', '"', "'", ' ']);	// '<' 开始标签, '=' 赋值, 引号内属性值, 空格分隔 class
-// // 注册补全器(context, 'css', [':', '.', '#', ' ']);	// ':' 后属性值, '.' 类, '#' ID, 空格后可能继续属性
-// // 注册补全器(context, 'sql', [' ', '.']);	// 空格后常接表名/字段名，但需严格上下文判断
-// // 注册补全器(context, 'json', ['"', ':']); // 键值对中的冒号和引号
-// // 注册补全器(context, 'yaml', [':', '?', '*']); // 冒号后常接值，问号/星号用于特殊结构
-// // 注册补全器(context, 'shell', ['$', '/', '=']); // 变量 $, 路径 /
-// // 注册补全器(context, 'markdown', ['#', '*', '-', '+', '`', '[', '(', ' ']); // #标题, *-/+/数字 .列表, `代码块, [(链接
-// // 注册补全器(context, 'rust', ['.', ':']); // '::' 用于模块/关联函数
-// // 注册补全器(context, 'lua', ['.', ':']);
-// // 注册补全器(context, 'csharp', ['.', '[']);
-// // 注册补全器(context, 'php', ['.', '->', '::', '$']);
-// // 注册补全器(context, '*', ['.']); // 其他编程语言
-// export function 注册补全器(context: vsc.ExtensionContext, 语言: string, 触发字符: string[]) {
-//     context.subscriptions.push(
-//         vsc.languages.registerCompletionItemProvider(
-//             { language: 语言 },
-//             { provideCompletionItems: 补全器实现, resolveCompletionItem: () => null },
-//             ...触发字符
-//         )
-//     );
-// }

@@ -2,8 +2,16 @@
   "name": "vscode-zh-completion",
   "displayName": "中文代码补全",
   "description": "使用拼音首字母，高效补全中文变量、方法与类名，提升中文编码体验。",
-  "version": "1.0.1",
-  "publisher": "Chinese",
+  "keywords": [
+    "chinese",
+    "pinyin",
+    "中文编码",
+    "中文变量",
+    "代码补全",
+    "拼音首字母"
+  ],
+  "version": "1.1.0",
+  "publisher": "chinese",
   "license": "BSD-3-Clause",
   "engines": {
     "vscode": "^1.105.0"

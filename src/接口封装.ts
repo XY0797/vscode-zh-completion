@@ -1,6 +1,6 @@
 /** VSCode 接口封装 */
 import * as vsc from 'vscode';
-import { 语言配置表, 语言通用配置, 补全锚点配置 } from './语言';
+import { 语言T, 语言配置表, 通用语言配置, 补全锚点配置 } from './语言';
 
 export * from 'vscode';
 
@@ -53,7 +53,8 @@ export function 矫正补全锚点(文档: vsc.TextDocument, 位置: vsc.Positio
         return 位置;
     }
     // 获取该语言的补全锚点配置，若无则使用默认配置
-    const 配置 = 语言配置表[语言标识].补全锚点配置 || (语言通用配置.补全锚点配置 as 补全锚点配置);
+    const 语言 = (语言配置表 as { [key: string]: 语言T })[语言标识];
+    const 配置 = 语言.补全锚点配置 || (通用语言配置.补全锚点配置 as 补全锚点配置);
     const 最大回退距离 = 配置.最大回退距离 || 20;
     let 当前索引 = 当前字符索引 - 1;
     let 已回退步数 = 0;
