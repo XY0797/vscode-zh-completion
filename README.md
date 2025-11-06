@@ -1,8 +1,8 @@
-# 中文代码输入
+# 中文代码补全
 
 使用拼音首字母，高效补全中文变量、方法与类名，提升中文编码体验。
 
-[VSCode 插件商店](https://marketplace.visualstudio.com/items?itemName=中文编程.vscode-zh-completion)
+VSCode Marketplace：[vscode-zh-completion](https://marketplace.visualstudio.com/items?itemName=Chinese.vscode-zh-completion)
 
 ## 配置
 
