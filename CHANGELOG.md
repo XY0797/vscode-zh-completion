@@ -1,9 +1,7 @@
-# Change Log
+# 版本说明
 
-All notable changes to the "vscode-zh-completion" extension will be documented in this file.
+## v1.0.0 - 2025-11-05
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
-
-## [Unreleased]
-
-- Initial release
+- 实现：使用拼音首字母，高效补全中文变量、方法与类名
+- 适配：不同类型的语言服务器（提供全部补全项的（如 Typescript） 和 部分补全项的（如 Python））
+- 测试：完成代表语言 Typescript 和 Python 的测试

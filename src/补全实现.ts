@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import { uniqWith } from 'ramda';
 import * as vsc from './接口封装';
 import { env } from './环境配置';
 
@@ -29,7 +29,7 @@ export async function 补全器实现(
     // - 过滤不包含中文的补全项.
     // - 过滤现在正在输入的字段.
     // - 过滤自定义的片段(Snippet), 因为无论这个函数是否返回结果, vsc总会带上它们.
-    let 补全列表: vsc.CompletionItem[] = R.uniqWith((a, b) => a.label === b.label, 系统补全器.items)
+    let 补全列表: vsc.CompletionItem[] = uniqWith((a, b) => a.label === b.label, 系统补全器.items)
         .filter((补全项) => /[\u4e00-\u9fa5\u3007]/.test(补全项.label.toString())) // 包含中文
         .filter((补全项) => 补全项.label !== 输入值)
         .filter((补全项) => 补全项.kind !== vsc.CompletionItemKind.Snippet);

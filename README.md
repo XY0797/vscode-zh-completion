@@ -1,71 +1,52 @@
-# vscode-zh-completion README
+# 中文代码输入
 
-This is the README for your extension "vscode-zh-completion". After writing up a brief description, we recommend including the following sections.
+使用拼音首字母，高效补全中文变量、方法与类名，提升中文编码体验。
 
-## Features
+[VSCode 插件商店](https://marketplace.visualstudio.com/items?itemName=中文编程.vscode-zh-completion)
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+## 配置
 
-For example if there is an image subfolder under your extension project workspace:
+配置参数（一般情况无需配置）：
 
-\!\[feature X\]\(images/feature-x.png\)
+|     参数名称     |    默认值    |        可选项        |                   详细说明                         |
+| --------------- | ---------- | -------------------- | ------------------------------------------------- |
+|  元音首字母通配符 |             |  依据输入法（如 'v'）  | 为了照顾「音形输入法」用户的输入习惯（a、e、i、o、u 等元音首字母的替换符）|
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+## 功能简介
 
-## Requirements
+### 简单
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+只解决最大的痛点：无法高效补全中文变量、方法与类名（所以拼音首字母，无须中英文切换）。
 
-## Extension Settings
+保留用户输入习惯：命名和注释还使用用户自己喜欢的输入法。
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+代码变整洁、代码字符变少的同时，中英文切换次数也并不会显著增加。
+「写注释时的中英文切换」可以抵消「命名时的中英文切换」（英文命需要注释，中文命名不需要注释）
 
-For example:
+### 高效
 
-This extension contributes the following settings:
+对 IDE 的性能几乎没有影响（整个插件不到 100 KB（包括程序、拼音首字母字典数据 和 效果图））
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+### 普适
 
-## Known Issues
+适配不同类型的语言服务器（提供全部补全项的（如 Typescript） 和 部分补全项的（如 Python））
+（欢迎在代码仓库递交 issue（BUG））
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+## 效果图
 
-## Release Notes
+为了减少插件体积，效果图就放一张
+![](images/python.png)
 
-Users appreciate release notes as you update your extension.
+## 版本更新说明
 
-### 1.0.0
+[CHANGELOG](CHANGELOG.md)
 
-Initial release of ...
+## 感谢
 
-### 1.0.1
+- 参考了 [中文代码快速补全](https://gitee.com/Program-in-Chinese/vscode_Chinese_Input_Assistant) 的实现
+- 参考了 [PYFL](https://www.npmjs.com/package/pyfl) 的拼音首字母字典的压缩算法
 
-Fixed issue #.
+## 协议
 
-### 1.1.0
+本项目使用 BSD3 协议.
 
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
