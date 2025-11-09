@@ -16,8 +16,7 @@ export async function 获得系统补全(
     var 系统补全 = await vsc.commands.executeCommand<vsc.CompletionList>(
         'vscode.executeCompletionItemProvider',
         document.uri,
-        position
-        // 矫正补全锚点(document, position)
+        矫正补全锚点(document, position)
     );
     return 系统补全;
 }
@@ -48,10 +47,11 @@ export function 获得输入值(): string {
 export function 矫正补全锚点(文档: vsc.TextDocument, 位置: vsc.Position): vsc.Position {
     log(`位置：${位置.line}, ${位置.character}`)
     const 行文本 = 文档.lineAt(位置.line).text;
-    const 当前字符索引 = 位置.character;
     const 语言标识 = 文档.languageId;
+    const 当前字符索引 = 位置.character;
+    const 当前输入非字母 = !/[a-zA-Z]/.test(行文本[当前字符索引]);
     // ts、js 语言服务器不做输入过滤，无须更改补全锚点（executeCompletionItemProvider 会返回所有补全项）
-    if (语言标识 === 'typescript' || 语言标识 === 'javascript') {
+    if (当前输入非字母 || 语言标识 === 'typescript' || 语言标识 === 'javascript') {
         return 位置;
     }
     // 获取该语言的补全锚点配置，若无则使用默认配置

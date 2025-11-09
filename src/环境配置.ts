@@ -11,7 +11,7 @@ class Env {
     public 输入习惯!: string; // 用户习惯的输入法
 
     async 加载配置() {
-        this.输入习惯 = vsc.workspace.getConfiguration('中文代码补全').get('输入习惯') as string;
+        this.输入习惯 = vsc.workspace.getConfiguration('中文代码补全').get('输入习惯') || '拼音';
         this.编码器 = await 载入编码器(this.输入习惯);
     }
 }
