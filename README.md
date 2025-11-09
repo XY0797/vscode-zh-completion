@@ -2,7 +2,7 @@
 
 使用拼音首字母，高效补全中文变量、方法与类名，提升中文编码体验。
 
-VSCode Marketplace：[vscode-zh-completion](https://marketplace.visualstudio.com/items?itemName=chinese.vscode-zh-completion)
+[![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/chinese.vscode-zh-completion?logo=visual-studio-code&label=VS%20Code%20插件)](https://marketplace.visualstudio.com/items?itemName=chinese.vscode-zh-completion)
 
 ## 配置
 
@@ -20,29 +20,25 @@ VSCode Marketplace：[vscode-zh-completion](https://marketplace.visualstudio.com
 
 ## 功能简介
 
-### 简单
+### ✅ 专注一件事
 
-**关注于中文命名**：实现高效补全中文变量、方法与类名（无须中英文切换）。
+**中文标识符的高效补全** —— 变量、函数、类名无需切换输入法即可直接输入，命名与注释仍使用你习惯的输入法。
 
-**保留用户习惯**：命名和注释还使用用户自己喜欢的输入法。
+支持拼音、五笔等多种输入习惯，**只需一次选择，插件即自动加载对应码表并配置好补全逻辑**。
 
-**配置化繁为简**：只需指定自己的输入习惯，剩下的事情都交给插件处理。
+### ⚡ 极致轻量高效
 
-### 高效
+**按需加载**：仅加载你配置的输入方案（如拼音 / 五笔）
 
-**按需加载**：只加载自己所需的码表（根据配置的输入习惯）
+**极简码表**：拼音与五笔码表各约 24 KB，内存占用极低
 
-**极简码表**：拼音 24 KB、五笔 24 KB
+**减少冗余**：中文命名天然具备语义，显著降低对英文注释的依赖，在**不增加中英文切换次数的前提下，同时提升代码可读性与输入效率**。
 
-**代码变整洁、代码字符变少的同时，中英文切换次数也并不会显著增加**
+### 🌐 广泛兼容
 
-「写注释时的中英文切换」可以抵消「命名时的中英文切换」（英文命需要注释，中文命名不需要注释）
+支持主流输入习惯（详见「输入习惯配置」）
 
-### 普适
-
-适配不同的输入习惯（见：输入习惯配置项）
-
-适配不同的编程语言（Python、JavaScript、Java、C++、...）
+无缝适配 Python、JavaScript、Java、C++ 等主流编程语言
 
 ## 效果图
 
