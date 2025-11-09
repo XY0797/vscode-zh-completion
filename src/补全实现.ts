@@ -15,7 +15,7 @@ export function 专项补全器(context: vsc.ExtensionContext, 语言: string, �
     context.subscriptions.push(
         vsc.languages.registerCompletionItemProvider(
             { language: 语言 },
-            { provideCompletionItems: 补全器实现, resolveCompletionItem: () => null },
+            { provideCompletionItems: 补全实现, resolveCompletionItem: () => null },
             ...触发字符
         )
     );
@@ -25,13 +25,13 @@ export function 通用补全器(context: vsc.ExtensionContext) {
     context.subscriptions.push(
         vsc.languages.registerCompletionItemProvider(
             { language: '*' },
-            { provideCompletionItems: 通用补全器实现, resolveCompletionItem: () => null },
+            { provideCompletionItems: 通用补全实现, resolveCompletionItem: () => null },
             ...通用语言配置.触发字符
         )
     );
 }
 
-export async function 补全器实现(
+export async function 补全实现(
     document: vsc.TextDocument, position: vsc.Position, token: vsc.CancellationToken, context: vsc.CompletionContext
 ) {
     const 输入值 = vsc.获得输入值();
@@ -60,20 +60,20 @@ export async function 补全器实现(
 
     // 设置最终结果
     for (var 补全项 of 补全列表) {
-        vsc.log(`补全项：${JSON.stringify(补全项)}`);
+        // vsc.log(`补全项：${JSON.stringify(补全项)}`);
         env.编码器.生成补全码(补全项);
     }
     return new vsc.CompletionList(补全列表, true);
 }
 
-export async function 通用补全器实现(
+export async function 通用补全实现(
     document: vsc.TextDocument, position: vsc.Position, token: vsc.CancellationToken, context: vsc.CompletionContext
 ) {
     // 如果语言已配置，则不做处理（避免重复处理）
     if (已配置语言列表.has(document.languageId)) {
         return [];
     }
-    return await 补全器实现(document, position, token, context);
+    return await 补全实现(document, position, token, context);
 }
 
 
@@ -85,6 +85,6 @@ export async function 通用补全器实现(
 // 			{ scheme: 'file', language: '*', notebookType: '*' },
 // 			{ scheme: 'untitled', language: '*', notebookType: '*' },
 // 		],
-// 		{ provideCompletionItems: 补全器实现, resolveCompletionItem: () => null }
+// 		{ provideCompletionItems: 补全实现, resolveCompletionItem: () => null }
 // 	)
 // );

@@ -8,7 +8,7 @@ VSCode Marketplace：[vscode-zh-completion](https://marketplace.visualstudio.com
 
 ### 输入习惯
 
-您可以在配置文件中指定输入习惯（默认：拼音），插件会根据您习惯的输入法做适配
+您可以在配置文件中指定输入习惯（默认：拼音），插件会适配您的输入
 
 |   输入习惯    |    补全码规则                                                |
 | ------------- | --------------------------------------------------------- |
@@ -30,7 +30,7 @@ VSCode Marketplace：[vscode-zh-completion](https://marketplace.visualstudio.com
 
 ### 高效
 
-按需加载：只加载适合自己的[码表]（根据配置的输入习惯）
+按需加载：只加载自己所需的码表（根据配置的输入习惯）
 
 极简码表：拼音 20 KB；
 
