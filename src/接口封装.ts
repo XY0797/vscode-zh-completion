@@ -38,8 +38,8 @@ export function 矫正补全锚点(文档: vsc.TextDocument, 位置: vsc.Positio
     const 语言标识 = 文档.languageId;
     const 矫正前锚点 = 位置.character;
     // 获取该语言的补全锚点配置，若无则使用默认配置
-    const 语言 = (语言配置表 as { [key: string]: 语言基类 })[语言标识];
-    const 配置 = 语言.补全锚点配置 || (通用语言实现.补全锚点配置 as 锚点配置T);
+    const 语言 = (语言配置表 as { [key: string]: 语言基类 })[语言标识] || 通用语言实现;
+    const 配置 = 语言.补全锚点配置 as 锚点配置T;
     const 最大回退距离 = 配置.最大回退距离 || 20;
     let 当前索引 = 矫正前锚点 - 1; // 锚点所在位置为空光标，前一位才是最后字符所在位置
     let 已回退步数 = 0;

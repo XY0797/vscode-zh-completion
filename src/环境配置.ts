@@ -21,8 +21,10 @@ class Env {
 
     注册语言(context: vsc.ExtensionContext) {
         for (const 语言 of 已配置的语言) {
-            注册已知语言补全器(context, 语言, (语言配置表 as { [key: string]: 语言基类 })[语言].触发字符);
+            const 语言实现 = (语言配置表 as { [key: string]: 语言基类 })[语言];
+            注册已知语言补全器(context, 语言, 语言实现.触发字符);
         }
+        // 各语言单独注册，以便提高补全器等级（等级太低会被 VSCode 忽略）
         for (const 语言 of 已知语言) {
             if (!已配置的语言.has(语言)) {
                 注册已知语言补全器(context, 语言, 通用语言实现.触发字符, true);
