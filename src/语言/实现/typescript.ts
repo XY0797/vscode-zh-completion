@@ -1,8 +1,12 @@
-import { 语言基类 } from '..';
+import * as vsc from '../../接口封装';
+import { 语言基类 } from '../基类';
 
 
 export class 语言实现 extends 语言基类 {
 
+    protected 需要矫正锚点(document: vsc.TextDocument): boolean {
+        return false;
+    }
     constructor() {
         super();
         this.触发字符 = [

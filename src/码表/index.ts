@@ -1,7 +1,11 @@
 import * as vsc from '../接口封装';
-
-export type 补全码编码器T = {
-}
+/**
+补全项格式：{"label": "Case", "kind": "Class", "sortText": "05.0001.Case", "insertText": "Case"}
+    - label: 显示在提示框中的具体内容（和 filterText 一样，也用于过滤）.
+    - filterText: 过滤补全项（根据该值是否包含输入值）.
+    - sortText: 此属性决定排序.
+    - insertText: 实际插入的内容.
+ */
 
 export abstract class 补全码编码器 {
     public 输入习惯!: string;

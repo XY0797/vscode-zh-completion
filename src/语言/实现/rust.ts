@@ -1,4 +1,4 @@
-import { 语言基类 } from '..';
+import { 语言基类 } from '../基类';
 
 
 export class 语言实现 extends 语言基类 {

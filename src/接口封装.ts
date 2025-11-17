@@ -1,6 +1,6 @@
 /** VSCode 接口封装 */
 import * as vsc from 'vscode';
-import { 语言T, 语言配置表, 通用语言配置, 补全锚点配置 } from './语言';
+import { 语言基类, 语言配置表, 通用语言实现, 锚点配置T } from './语言';
 
 export * from 'vscode';
 
@@ -8,17 +8,6 @@ const outputChannel = vsc.window.createOutputChannel('中文代码补全');
 
 export function log(msg: string) {
     outputChannel.appendLine(`[${new Date().toLocaleString()}] ${msg}`);
-}
-
-export async function 获得系统补全(
-    document: vsc.TextDocument, position: vsc.Position
-): Promise<vsc.CompletionList<vsc.CompletionItem>> {
-    var 系统补全 = await vsc.commands.executeCommand<vsc.CompletionList>(
-        'vscode.executeCompletionItemProvider',
-        document.uri,
-        矫正补全锚点(document, position)
-    );
-    return 系统补全;
 }
 
 export function 获得输入值(): string {
@@ -48,13 +37,9 @@ export function 矫正补全锚点(文档: vsc.TextDocument, 位置: vsc.Positio
     const 行文本 = 文档.lineAt(位置.line).text;
     const 语言标识 = 文档.languageId;
     const 矫正前锚点 = 位置.character;
-    // ts、js 语言服务器不做输入过滤，无须更改补全锚点（executeCompletionItemProvider 会返回所有补全项）
-    if (语言标识 === 'typescript' || 语言标识 === 'javascript') {
-        return 位置;
-    }
     // 获取该语言的补全锚点配置，若无则使用默认配置
-    const 语言 = (语言配置表 as { [key: string]: 语言T })[语言标识];
-    const 配置 = 语言.补全锚点配置 || (通用语言配置.补全锚点配置 as 补全锚点配置);
+    const 语言 = (语言配置表 as { [key: string]: 语言基类 })[语言标识];
+    const 配置 = 语言.补全锚点配置 || (通用语言实现.补全锚点配置 as 锚点配置T);
     const 最大回退距离 = 配置.最大回退距离 || 20;
     let 当前索引 = 矫正前锚点 - 1; // 锚点所在位置为空光标，前一位才是最后字符所在位置
     let 已回退步数 = 0;
@@ -75,11 +60,11 @@ export function 矫正补全锚点(文档: vsc.TextDocument, 位置: vsc.Positio
         while (矫正后锚点 < 矫正前锚点 && /\s/.test(行文本[矫正后锚点])) {
             矫正后锚点++;
         }
-        log(`矫正补全锚点a：${位置.character} -> ${矫正后锚点}`);
+        // log(`矫正补全锚点a：${矫正前锚点} -> ${矫正后锚点}`);
         return new vsc.Position(位置.line, 矫正后锚点);
     }
     // 步骤三：未找到语法边界，则返回当前标识符的起始位置
     const 矫正后锚点 = 当前索引 === 0 ? 0 : 当前索引 + 1;
-    log(`矫正补全锚点b：${位置.character} -> ${矫正后锚点}`);
+    // log(`矫正补全锚点b：${矫正前锚点} -> ${矫正后锚点}`);
     return new vsc.Position(位置.line, 矫正后锚点);
 }

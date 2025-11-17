@@ -1,6 +1,6 @@
 import * as vsc from './接口封装';
-import { 注册专用补全器, 注册通用补全器, 通用补全实现 } from './补全实现';
-import { 语言基类, 语言配置表, 已配置的语言, 通用语言配置, 获取语言实现 } from './语言';
+import { 注册已知语言补全器, 注册未知语言补全器 } from './补全实现';
+import { 语言基类, 通用语言实现, 语言配置表, 已配置的语言, 已知语言 } from './语言';
 import { 补全码编码器, 载入编码器 } from './码表';
 
 class Env {
@@ -21,32 +21,14 @@ class Env {
 
     注册语言(context: vsc.ExtensionContext) {
         for (const 语言 of 已配置的语言) {
-            vsc.log(`配置语言：${语言}, 触发字符：${(语言配置表 as { [key: string]: 语言T })[语言].触发字符}`);
-            注册专用补全器(context, 语言, (语言配置表 as { [key: string]: 语言T })[语言].触发字符);
+            注册已知语言补全器(context, 语言, (语言配置表 as { [key: string]: 语言基类 })[语言].触发字符);
         }
-        vsc.log(`配置语言：其他, 触发字符：${通用语言配置.触发字符}`);
-        注册通用补全器(context);
-    }
-
-    // 按需加载（根据打开的文件类型）
-    加载语言(context: vsc.ExtensionContext) {
-        context.subscriptions.push(
-            vsc.window.onDidChangeActiveTextEditor(editor => {
-                const languageId = editor?.document.languageId; // 新打开文件的类型
-                if (languageId) {
-                    vsc.log(`打开文件类型：${languageId}`);
-                    if (已配置的语言.includes(languageId)) {
-                        vsc.log(`加载语言：${languageId}`);
-                        获取语言实现(languageId).then(语言实现 => {
-                            if (语言实现) {
-                                vsc.log(`注册语言：${languageId}`);
-                                注册专用补全器(context, languageId, 语言实现)
-                            }
-                        })
-                    }
-                }
-            })
-        );
+        for (const 语言 of 已知语言) {
+            if (!已配置的语言.has(语言)) {
+                注册已知语言补全器(context, 语言, 通用语言实现.触发字符, true);
+            }
+        }
+        注册未知语言补全器(context);
     }
 }
 

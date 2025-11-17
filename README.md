@@ -1,6 +1,6 @@
 # 中文代码补全
 
-使用字母组合，高效补全中文变量、方法与类名，提升中文编码体验。
+无须切换输入法，高效补全中文变量、方法与类名，提升中文编码体验。
 
 [![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/chinese.vscode-zh-completion?logo=visual-studio-code&label=VS%20Code%20插件)](https://marketplace.visualstudio.com/items?itemName=chinese.vscode-zh-completion)
 

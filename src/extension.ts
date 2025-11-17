@@ -13,8 +13,6 @@ export function activate(context: vsc.ExtensionContext) {
 
 		env.注册语言(context);
 
-		env.加载语言(context); // 按需加载（根据打开的文件类型）
-
 		vsc.log('插件已启动');
 	} catch (e) {
 		console.error(e);
