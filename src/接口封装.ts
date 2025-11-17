@@ -47,7 +47,7 @@ export function 获得输入值(): string {
 export function 矫正补全锚点(文档: vsc.TextDocument, 位置: vsc.Position): vsc.Position {
     const 行文本 = 文档.lineAt(位置.line).text;
     const 语言标识 = 文档.languageId;
-    const 当前字符索引 = 位置.character;
+    const 矫正前锚点 = 位置.character;
     // ts、js 语言服务器不做输入过滤，无须更改补全锚点（executeCompletionItemProvider 会返回所有补全项）
     if (语言标识 === 'typescript' || 语言标识 === 'javascript') {
         return 位置;
@@ -56,7 +56,7 @@ export function 矫正补全锚点(文档: vsc.TextDocument, 位置: vsc.Positio
     const 语言 = (语言配置表 as { [key: string]: 语言T })[语言标识];
     const 配置 = 语言.补全锚点配置 || (通用语言配置.补全锚点配置 as 补全锚点配置);
     const 最大回退距离 = 配置.最大回退距离 || 20;
-    let 当前索引 = 当前字符索引 - 1;
+    let 当前索引 = 矫正前锚点 - 1; // 锚点所在位置为空光标，前一位才是最后字符所在位置
     let 已回退步数 = 0;
     // 步骤一：向左跳过所有属于“标识符”的字符（如变量名的一部分）
     while (当前索引 > 0 && 已回退步数 < 最大回退距离) {
@@ -71,12 +71,15 @@ export function 矫正补全锚点(文档: vsc.TextDocument, 位置: vsc.Positio
     // 步骤二：检查当前位置前一个字符是否是语法边界
     if (当前索引 >= 0 && 配置.语法边界字符.has(行文本[当前索引])) {
         // 跳过边界后的空白字符，定位到第一个有效字符
-        let 探测位置 = 当前索引 + 1;
-        while (探测位置 < 当前字符索引 && /\s/.test(行文本[探测位置])) {
-            探测位置++;
+        let 矫正后锚点 = 当前索引 + 1;
+        while (矫正后锚点 < 矫正前锚点 && /\s/.test(行文本[矫正后锚点])) {
+            矫正后锚点++;
         }
-        return new vsc.Position(位置.line, 探测位置);
+        log(`矫正补全锚点a：${位置.character} -> ${矫正后锚点}`);
+        return new vsc.Position(位置.line, 矫正后锚点);
     }
     // 步骤三：未找到语法边界，则返回当前标识符的起始位置
-    return new vsc.Position(位置.line, 当前索引 + 1);
+    const 矫正后锚点 = 当前索引 === 0 ? 0 : 当前索引 + 1;
+    log(`矫正补全锚点b：${位置.character} -> ${矫正后锚点}`);
+    return new vsc.Position(位置.line, 矫正后锚点);
 }

@@ -1,6 +1,6 @@
 # 中文代码补全
 
-使用拼音首字母，高效补全中文变量、方法与类名，提升中文编码体验。
+使用字母组合，高效补全中文变量、方法与类名，提升中文编码体验。
 
 [![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/chinese.vscode-zh-completion?logo=visual-studio-code&label=VS%20Code%20插件)](https://marketplace.visualstudio.com/items?itemName=chinese.vscode-zh-completion)
 
@@ -30,7 +30,7 @@
 
 **按需加载**：仅加载你配置的输入方案（如拼音 / 五笔）
 
-**极简码表**：拼音与五笔码表各约 24 KB，内存占用极低
+**极简码表**：特别设计的码表（20 KB），内存占用极低
 
 **减少冗余**：中文命名天然具备语义，显著降低对英文注释的依赖，在**不增加中英文切换次数的前提下，同时提升代码可读性与输入效率**。
 

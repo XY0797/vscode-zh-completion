@@ -1,6 +1,6 @@
 import { uniqWith } from 'ramda';
 import * as vsc from './接口封装';
-import { 已配置语言列表, 通用语言配置 } from './语言';
+import { 已配置的语言, 通用语言配置 } from './语言';
 import { env } from './环境配置';
 
 /**
@@ -11,7 +11,7 @@ import { env } from './环境配置';
     - insertText: 实际插入的内容.
  */
 
-export function 专项补全器(context: vsc.ExtensionContext, 语言: string, 触发字符: string[]) {
+export function 注册专用补全器(context: vsc.ExtensionContext, 语言: string, 触发字符: string[]) {
     context.subscriptions.push(
         vsc.languages.registerCompletionItemProvider(
             { language: 语言 },
@@ -21,7 +21,7 @@ export function 专项补全器(context: vsc.ExtensionContext, 语言: string, �
     );
 }
 
-export function 通用补全器(context: vsc.ExtensionContext) {
+export function 注册通用补全器(context: vsc.ExtensionContext) {
     context.subscriptions.push(
         vsc.languages.registerCompletionItemProvider(
             { language: '*' },
@@ -48,19 +48,24 @@ export async function 补全实现(
         env.获得系统补全中 = false; // 即使 await 抛错，也会执行
     }
 
+    系统补全器.items.forEach((补全项) => {
+        vsc.log(`系统补全项：${JSON.stringify(补全项)}`);
+    });
+
     // 对做系统补全列表以下处理:
     // - 去重.
     // - 过滤不包含中文的补全项.
     // - 过滤现在正在输入的字段.
     // - 过滤自定义的片段(Snippet), 因为无论这个函数是否返回结果, vsc总会带上它们.
     let 补全列表: vsc.CompletionItem[] = uniqWith((a, b) => a.label === b.label, 系统补全器.items)
-        .filter((补全项) => /[\u4e00-\u9fa5\u3007]/.test(补全项.label.toString())) // 包含中文
-        .filter((补全项) => 补全项.label !== 输入值)
-        .filter((补全项) => 补全项.kind !== vsc.CompletionItemKind.Snippet);
+        .filter((补全项) => 过滤补全项(补全项, 输入值));
+    // .filter((补全项) => /[\u4e00-\u9fa5\u3007]/.test(补全项.label.toString())) // 包含中文
+    // .filter((补全项) => (补全项.label as any).label ? (补全项.label as any).label !== 输入值 : 补全项.label !== 输入值)
+    // .filter((补全项) => 补全项.kind !== vsc.CompletionItemKind.Snippet);
 
     // 设置最终结果
     for (var 补全项 of 补全列表) {
-        // vsc.log(`补全项：${JSON.stringify(补全项)}`);
+        vsc.log(`补全项：${JSON.stringify(补全项)}`);
         env.编码器.生成补全码(补全项);
     }
     return new vsc.CompletionList(补全列表, true);
@@ -70,12 +75,34 @@ export async function 通用补全实现(
     document: vsc.TextDocument, position: vsc.Position, token: vsc.CancellationToken, context: vsc.CompletionContext
 ) {
     // 如果语言已配置，则不做处理（避免重复处理）
-    if (已配置语言列表.has(document.languageId)) {
+    if (已配置的语言.has(document.languageId)) {
         return [];
     }
     return await 补全实现(document, position, token, context);
 }
 
+function 过滤补全项(补全项: vsc.CompletionItem, 输入值: string): boolean {
+    const 标签值 = (补全项.label as any).label ? (补全项.label as any).label : 补全项.label;
+    vsc.log(`标签值：${标签值}`);
+
+    // 检查是否包含中文字符
+    const 包含中文 = /[\u4e00-\u9fa5\u3007]/.test(标签值);
+    if (!包含中文) {
+        return false;
+    }
+
+    // 检查是否与当前输入值相同
+    if (标签值 === 输入值) {
+        return false;
+    }
+
+    // 检查是否为Snippet类型
+    if (补全项.kind === vsc.CompletionItemKind.Snippet) {
+        return false;
+    }
+
+    return true;
+}
 
 // context.subscriptions.push(
 // 	vsc.languages.registerCompletionItemProvider(

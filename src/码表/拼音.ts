@@ -17,7 +17,7 @@ export class 编码器 extends 补全码编码器 {
     };
 
     生成补全码(补全项: vsc.CompletionItem) {    // '中国 ❤ china' → 'zg ❤ china'
-        const 补全项文本 = 补全项.label.toString();
+        const 补全项文本 = (补全项.label as any).label ? (补全项.label as any).label : 补全项.label;
         const 补全码组: string[] = [];
 
         if (this.输入习惯 === '声笔简码' && 补全项文本.length > 4) {
@@ -34,7 +34,7 @@ export class 编码器 extends 补全码编码器 {
         }
         const 补全码 = 补全码组.join("");
         补全项.filterText = 补全码;
-        补全项.insertText = 补全项文本;
+        // 补全项.insertText = 补全项文本;
     }
 
     生成声笔简码(补全项文本: string, 补全码组: string[]) {
