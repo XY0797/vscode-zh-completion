@@ -14,7 +14,17 @@ export abstract class 补全码编码器 {
         this.输入习惯 = 输入习惯;
     };
 
-    abstract 生成补全码(补全项: vsc.CompletionItem): void;
+    /** 更改 补全项.filterText（如：拼音 '中国 ❤ china' → 'zg ❤ china'）*/
+    abstract 生成补全码(补全项: vsc.CompletionItem, 补全项文本: string): void;
+
+    _生成补全码(补全项: vsc.CompletionItem): void {
+        const 补全项文本 = (补全项.label as any).label ? (补全项.label as any).label : 补全项.label;
+        this.生成补全码(补全项, 补全项文本);
+        // 中文项前排显示（要求首字符为中文）
+        if (/^[\u4e00-\u9fa5]/.test(补全项文本)) {
+            补全项.sortText = `08.8888.${补全项文本}`;
+        }
+    }
 }
 
 export async function 载入编码器(输入习惯: string): Promise<补全码编码器> {

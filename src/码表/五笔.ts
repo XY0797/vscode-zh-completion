@@ -5,8 +5,7 @@ export abstract class 五笔编码器 extends 补全码编码器 {
     // unicode码表 19968 ~ 40869 所有汉字的五笔首笔画代码
     abstract 码表: string;
 
-    生成补全码(补全项: vsc.CompletionItem) {
-        const 补全项文本 = (补全项.label as any).label ? (补全项.label as any).label : 补全项.label;
+    生成补全码(补全项: vsc.CompletionItem, 补全项文本: string) {
         const 补全码组: string[] = [];
 
         if (补全项文本.length > 4) {
