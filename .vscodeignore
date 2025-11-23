@@ -2,7 +2,7 @@
 .vscode-test/**
 out/**
 node_modules/**
-script/*.py
+script/**
 src/**
 publish.sh
 贡献指南.md
